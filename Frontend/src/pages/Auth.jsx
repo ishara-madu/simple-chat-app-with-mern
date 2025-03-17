@@ -13,13 +13,11 @@ export default function Auth() {
 
   return (
     <div className='wrapper-auth'>
-      <div className='container'>
+      <form  onSubmit={(e) => { e.preventDefault(); }} className='container'>
         <h1>Join for Chat</h1>
         <input type="text" onChange={(e) => { setUsername(e.target.value) }} name="" id="" className='username' value={username} />
-        <a type="button" className='submit' value={"Submit"} onClick={()=>{
-          handleSubmit()
-        }}>Submit</a>
-      </div>
+        <input type="submit" className='submit' value={"Submit"} onClick={() => { handleSubmit() }} />
+      </form>
     </div>
   )
 }

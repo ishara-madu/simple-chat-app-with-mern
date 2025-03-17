@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import Auth from './pages/Auth'
 import './App.css'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import InputMessage from './components/InputMessage';
 import ChatHistory from './components/ChatHistory';
+import Logout from './components/Logout';
 export default function App() {
 
   const [messagesHistory, setMessagesHistory] = useState([])
 
-  const socket = io('http://localhost:5000', {
-    transports: ['websocket', 'polling'], // Ensure both transports are allowed
-  });
+  const socket = io('http://localhost:5000');
   useEffect(() => {
     axios.get('http://localhost:5000/api/messages').then((res) => setMessagesHistory(res.data));
     socket.on('message', (newMessage) => {
@@ -30,17 +28,16 @@ export default function App() {
   }, [])
 
 
-
-
-
-
   return (
     <div className='wrapper'>
       <div className="top-bar">
         <h1>Random Chat</h1>
-        <p>Hello,{Cookies.get('username')}</p>
+        <div className='top-bar-right'>
+          <p>Hello,{Cookies.get('username')}</p>
+          <Logout />
+        </div>
       </div>
-      <ChatHistory messagesHistory={messagesHistory}/>
+      <ChatHistory messagesHistory={messagesHistory} />
       <InputMessage />
     </div>
   )
