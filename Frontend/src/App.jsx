@@ -5,7 +5,7 @@ import sendImage from './assets/send.png'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-
+import { format } from 'date-fns';
 export default function App() {
 
   const [message, setMessage] = useState('')
@@ -45,6 +45,11 @@ export default function App() {
       }
     )
   }
+
+  const getFormattedTime = (createdAt) => {
+    return format(new Date(createdAt), 'dd MMM yyyy HH:mm');
+  };
+  
   return (
     <div className='wrapper'>
       <div className="top-bar">
@@ -55,15 +60,17 @@ export default function App() {
         {
           messagesHistory.map((msg, index) => (
             <div key={index} className={`chat-container ${msg.username === Cookies.get('username') ? 'mine' : 'other'}`}>
-              <p className='chat-username'>{msg.username}</p><p className='chat-dot'>:</p>
+              <div className='chat-top'>
+                <p className='chat-username'>{msg.username}</p>
+                <p className='chat-timestamp'>{getFormattedTime(msg.createdAt)}</p>
+              </div>
               <p className='chat-message'>{msg.message}</p>
             </div>
           ))
         }
-        <div style={{ height: "10px" }}></div>
-        <div ref={messagesEndRef}></div>
+        <div ref={messagesEndRef} className="bottom-chat-container"></div>
       </div>
-      <form className="message-area" onSubmit={(e)=>{e.preventDefault();}}>
+      <form className="message-area" onSubmit={(e) => { e.preventDefault(); }}>
         <div className='message-input-wrapper'>
           <input onChange={(e) => { setMessage(e.target.value) }} type="text" className='message-input' placeholder='Enter your message here' value={message} />
         </div>
